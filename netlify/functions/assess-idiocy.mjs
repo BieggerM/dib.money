@@ -1,7 +1,8 @@
-const { GoogleGenerativeAI } = require("@google/generative-ai");
-import { getDatabase } from "@netlify/neon";
+import { GoogleGenerativeAI } from "@google/generative-ai";
+import { neon } from "@netlify/neon";
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+const sql = neon()
 
 exports.handler = async (event) => {
     if (event.httpMethod !== 'POST') {
@@ -49,11 +50,20 @@ exports.handler = async (event) => {
             "score": 85
         }
         `;
+        // get results
         const result = await model.generateContent(prompt);
         const response = await result.response;
         const jsonText = response.text();
-        
 
+        const data = JSON.parse(jsonText);
+
+        if (data.score !== undefined) {
+            await sql`
+                INSERT INTO assessments (product_name, score, created_at) 
+                VALUES (${productName}, ${data.score}, ${new Date()})
+            `;
+        }
+        console.log(jsonText)
         return {
             statusCode: 200,
             // Wir leiten den kompletten JSON-String weiter

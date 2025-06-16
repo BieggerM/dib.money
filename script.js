@@ -10,11 +10,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const finalAssessmentBtn = document.getElementById('final-assessment-btn'); // NEU
     const resultContainer = document.getElementById('result-container');
     const resultText = document.getElementById('result-text');
-    const scoreDisplay = document.getElementById('score-display');
     const scoreCircle = document.querySelector('.score-circle');
     const scoreValue = document.getElementById('score-value');
     const resetBtn = document.getElementById('reset-btn');
-
+    const historyList = document.getElementById('history-list');
     // App-Zustand
     let appState = {
         productName: '',
@@ -30,7 +29,7 @@ document.addEventListener('DOMContentLoaded', () => {
     questionsContainer.addEventListener('click', handleBooleanAnswer);
     questionsContainer.addEventListener('change', handleTextAnswer); // 'change' ist besser als 'input'
     resetBtn.addEventListener('click', resetUI);
-
+    fetchHistory();
     // --- Hauptfunktionen ---
 
     async function handleStartAssessment(event) {
@@ -136,31 +135,47 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    function getScoreColor(score) {
+        if (score < 40) return '#2ecc71'; // Grün
+        if (score > 75) return '#e74c3c'; // Rot
+        return '#ffb700'; // Gelb für alles dazwischen
+    }
+    
+    /**
+     * Ruft die letzten Bewertungen vom Backend ab und zeigt sie an.
+     */
     async function fetchHistory() {
         try {
+            // Rufe unsere neue serverlose Funktion auf
             const response = await fetch('/.netlify/functions/get-history');
-            if (!response.ok) throw new Error("Could not fetch history.");
+            if (!response.ok) {
+                throw new Error("Could not fetch history.");
+            }
             
             const items = await response.json();
-            historyList.innerHTML = ''; // Leere die alte Liste
     
+            // Leere die bestehende Liste, bevor wir sie neu befüllen
+            historyList.innerHTML = ''; 
+    
+            // Gehe durch jeden Eintrag und erstelle ein Listenelement
             items.forEach(item => {
                 const li = document.createElement('li');
-                
-                // Definiere die Farbe basierend auf dem Score
-                let scoreColor = '#ffb700'; // Gelb
-                if (item.score < 40) scoreColor = '#2ecc71'; // Grün
-                if (item.score > 75) scoreColor = '#e74c3c'; // Rot
+                const scoreColor = getScoreColor(item.score);
     
+                // Erstelle das HTML für das Listenelement
                 li.innerHTML = `
-                    <span class="history-product">${item.product}</span>
+                    <span class="history-product">${item.product_name}</span>
                     <span class="history-score" style="color: ${scoreColor};">${item.score}</span>
                 `;
+    
+                // Füge das fertige Element zur Liste im HTML hinzu
                 historyList.appendChild(li);
             });
+    
         } catch (error) {
             console.error(error);
-            historyList.innerHTML = '<li>Could not load history.</li>';
+            // Zeige eine Fehlermeldung an, falls etwas schiefgeht
+            historyList.innerHTML = '<li>Could not load recent assessments.</li>';
         }
     }
     
@@ -179,22 +194,17 @@ document.addEventListener('DOMContentLoaded', () => {
     
             // Die Antwort ist jetzt ein Objekt mit "assessment" und "score"
             const data = await response.json();
-    
+            console.log(data)
             // UI mit beiden Werten aktualisieren
             resultText.textContent = data.assessment;
             scoreValue.textContent = data.score;
     
             // Den Tacho und die Farbe dynamisch anpassen
             const score = data.score;
+            const scoreColor = getScoreColor(score);
             scoreCircle.style.setProperty('--score-percent', `${score}%`);
-    
-            let scoreColor = '#ffb700'; // Gelb für Mittelmaß
-            if (score < 40) scoreColor = '#2ecc71'; // Grün für "Genie"
-            if (score > 75) scoreColor = '#e74c3c'; // Rot für "Idiot"
-    
             scoreCircle.style.setProperty('--score-color', scoreColor);
-            scoreValue.style.color = scoreColor;
-    
+
             resultContainer.classList.remove('hidden');
     
         } catch (error) {
