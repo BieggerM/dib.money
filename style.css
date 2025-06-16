@@ -49,12 +49,41 @@ body::before {
     box-shadow: 0 0 15px rgba(0, 0, 0, 0.5), inset 0 0 5px rgba(255, 183, 0, 0.1);
 }
 
-.icon {
-    stroke: var(--accent-color);
-    width: 48px;
-    height: 48px;
+.logo {
+    width: 120px;
+    max-width: 100%;
+    height: auto;
     margin-bottom: 1rem;
-    animation: flicker 3s infinite alternate; 
+
+    /* Der statische Schein (dient als Ausgangspunkt) */
+    filter: 
+        drop-shadow(0 0 3px rgba(255, 255, 220, 0.8)) 
+        drop-shadow(0 0 8px #ffb700) 
+        drop-shadow(0 0 20px #e74c3c);
+
+    /* NEU: Die Animation, die das Flackern erzeugt */
+    animation: fire-glow 4s ease-in-out infinite alternate;
+}
+
+@keyframes fire-glow {
+    0% {
+        filter: 
+            drop-shadow(0 0 3px rgba(255, 255, 220, 0.8)) 
+            drop-shadow(0 0 8px #ffb700) 
+            drop-shadow(0 0 20px #e74c3c);
+    }
+    50% {
+        filter: 
+            drop-shadow(0 0 4px rgba(255, 255, 220, 1)) 
+            drop-shadow(0 0 12px #ffc300) 
+            drop-shadow(0 0 25px #ff4848);
+    }
+    100% {
+        filter: 
+            drop-shadow(0 0 3px rgba(255, 255, 220, 0.8)) 
+            drop-shadow(0 0 8px #ffb700) 
+            drop-shadow(0 0 20px #e74c3c);
+    }
 }
 
 .brand-tagline {
