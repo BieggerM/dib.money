@@ -1,11 +1,11 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { neon } from "@netlify/neon";
 
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-let aiModel = process.env.MODEL;
+const genAI = new GoogleGenerativeAI(process.env.AI_API_KEY);
+let aiModel = process.env.AI_MODEL;
 const sql = neon();
 
-exports.handler = async (event) => {
+export const handler = async (event) => {
   if (event.httpMethod !== "POST") {
     return { statusCode: 405, body: "Method Not Allowed" };
   }

@@ -1,7 +1,7 @@
 const { GoogleGenerativeAI } = require("@google/generative-ai");
 
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-let aiModel = process.env.MODEL;
+const genAI = new GoogleGenerativeAI(process.env.AI_API_KEY);
+let aiModel = process.env.AI_MODEL;
 
 exports.handler = async (event) => {
   if (event.httpMethod !== "POST") {
