@@ -43,7 +43,7 @@ exports.handler = async (event) => {
 
         **IF the product name is SUITABLE, proceed to generate the 5 questions based on these requirements:**
         1.  **Tone:** Sarcastic, critical. The questions should subtly put the user on the defensive.
-        2.  **Focus:** Concentrate on the product's potential flaws, the cost, and the buyer's naivety. If the purchase seems sound you can ask questions to get more context.
+        2.  **Focus:** Concentrate on the product's potential flaws, the cost. If the purchase seems sound you can ask about the  product to get more context.
         3.  **Length:** Each question must be under 12 words.
         4.  **Logic for Question Type:**
             - Use the type 'boolean' for clear Yes/No questions. This should be the majority of questions.
