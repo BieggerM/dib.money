@@ -2,7 +2,7 @@ import { GoogleGenerativeAI } from "@google/generative-ai";
 import { neon } from "@netlify/neon";
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-const aiModel = process.env.MODELL;
+let aiModel = process.env.MODEL;
 const sql = neon();
 
 exports.handler = async (event) => {
@@ -95,7 +95,7 @@ exports.handler = async (event) => {
 
     return {
       statusCode: 200,
-      body: jsonText,
+      body: responseText,
     };
   } catch (error) {
     console.error("Fehler in assess-idiocy function:", error);

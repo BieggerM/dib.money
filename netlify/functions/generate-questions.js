@@ -1,8 +1,7 @@
-// in netlify/functions/generate-questions.js
-
 const { GoogleGenerativeAI } = require("@google/generative-ai");
+
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-const aiModel = process.env.MODELL;
+let aiModel = process.env.MODEL;
 
 exports.handler = async (event) => {
   if (event.httpMethod !== "POST") {
