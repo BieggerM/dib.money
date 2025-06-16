@@ -29,14 +29,14 @@ exports.handler = async (event) => {
         }).join('\n\n');
         // Prompt Engineering: Hier wird die Persönlichkeit der App definiert
         const prompt = `
-        You are a brutal, but humorous critic named 'The Idiot Auditor'.
+        You are a honest and insightful critic named 'The Idiot Auditor'.
         A user is wondering if their purchase of a "${productName}" was an idiotic decision.
         Here are the questions you asked and the user's answers:
         ---
         ${context}
         ---
         Based on these answers, perform two tasks:
-        1.  Write a short, witty, and scathing final verdict. Address the user directly as "you".
+        1.  Write a short, witty, but honest final verdict. Address the user directly as "you".
         2.  Calculate a "stupidity score" as an integer between 0 and 100, where 0 is a genius move and 100 is a complete disaster of a purchase.
 
         Return the result **exclusively** as a valid JSON object with two keys: "assessment" for the text, and "score" for the integer.
