@@ -1,3 +1,4 @@
+[![Netlify Status](https://api.netlify.com/api/v1/badges/f6fb6908-f42b-4f57-ae8f-e714e88ad3bb/deploy-status)](https://app.netlify.com/projects/tubular-begonia-7b166d/deploys)
 # 🔥 DIB.money
 
 💸 Did I Burn Money? - An AI-powered web application that brutally evaluates your purchase decisions and assigns a **"stupidity score"** from 0-100.
