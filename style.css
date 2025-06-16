@@ -1,0 +1,340 @@
+/*
+    DESIGN BRIEF IMPLEMENTATION
+    Vibe: Retro-futuristic, "no-nonsense assessment terminal"
+    Palette: Starkes Schwarz-Weiß mit einem Akzent (Amber/Gelb)
+    Typography: Oswald für Titel (kraftvoll), Share Tech Mono für den Rest (Terminal-Feeling)
+*/
+
+/* 1. CSS-Variablen für einfache Verwaltung der Farbpalette */
+:root {
+    --bg-color: #121212; /* Ein sehr dunkles Grau, nicht reines Schwarz */
+    --text-color: #e0e0e0;
+    --accent-color: #ffb700; /* Ein kräftiges, warmes Amber/Gelb */
+    --accent-hover-color: #ffc940;
+    --input-bg: #1f1f1f;
+    --border-color: #444;
+    --result-bg: rgba(220, 53, 69, 0.1); /* Roter Hintergrund für das Urteil */
+    --result-border: #dc3545;
+    
+    --font-heading: 'Oswald', sans-serif;
+    --font-body: 'Share Tech Mono', monospace;
+}
+
+/* 2. Grundlegende Styles und Hintergrundtextur */
+* {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: var(--font-body);
+    background-color: var(--bg-color);
+    /* Subtile, rauschende Hintergrundtextur für den "distressed" Look */
+    background-image: url('data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 800"%3E%3Cg fill="%23222" fill-opacity="0.2"%3E%3Cpath d="M0 0h800v800H0z"/%3E%3Cpath d="M784 0l-512 512h256l512-512h-256z"/%3E%3C/g%3E%3C/svg%3E');
+    color: var(--text-color);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 1rem;
+    margin: 0;
+}
+
+/* 3. Hauptcontainer im Terminal-Stil */
+.container {
+    background-color: var(--bg-color);
+    border: 1px solid var(--border-color);
+    padding: 2rem 3rem;
+    max-width: 650px;
+    width: 100%;
+    text-align: center;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.5), inset 0 0 5px rgba(255, 183, 0, 0.1);
+}
+
+/* 4. Typografie und Icons */
+.icon {
+    stroke: var(--accent-color);
+    width: 48px;
+    height: 48px;
+    margin-bottom: 1rem;
+    animation: flicker 3s infinite alternate; /* Subtile Flacker-Animation */
+}
+
+h1 {
+    font-family: var(--font-heading);
+    font-size: 2.5rem;
+    color: var(--text-color);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin: 0;
+}
+
+.subtitle {
+    color: #aaa;
+    margin-bottom: 2.5rem;
+    font-size: 1.1rem;
+}
+
+/* 5. Formular-Elemente im "Industrial"-Look */
+.form-wrapper {
+    margin-bottom: 2rem;
+}
+
+#product-input {
+    width: 100%;
+    background-color: var(--input-bg);
+    border: 1px solid var(--border-color);
+    color: var(--text-color);
+    padding: 15px;
+    font-family: var(--font-body);
+    font-size: 1.2rem;
+    margin-bottom: 1rem;
+    transition: all 0.2s ease-in-out;
+}
+
+#product-input::placeholder {
+    color: #777;
+}
+
+#product-input:focus {
+    outline: none;
+    border-color: var(--accent-color);
+    box-shadow: 0 0 10px rgba(255, 183, 0, 0.3);
+}
+
+button {
+    width: 100%;
+    padding: 15px 20px;
+    border: 2px solid var(--accent-color);
+    background-color: transparent;
+    color: var(--accent-color);
+    font-family: var(--font-body);
+    font-size: 1.2rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+}
+
+button:hover, button:focus {
+    background-color: var(--accent-color);
+    color: var(--bg-color);
+    box-shadow: 0 0 15px var(--accent-color);
+}
+
+/* 6. UI-Feedback (Spinner, Fragen, Ergebnis) */
+.spinner {
+    border: 4px solid rgba(255, 255, 255, 0.2);
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border-left-color: var(--accent-color);
+    margin: 2rem auto;
+    animation: spin 1s linear infinite;
+}
+
+.question-block {
+    margin: 2rem 0;
+    text-align: left;
+    border-left: 2px solid var(--accent-color);
+    padding-left: 1rem;
+}
+.question-block p {
+    font-size: 1.2rem;
+    margin-bottom: 1rem;
+}
+.answer-buttons button {
+    width: auto;
+    margin-right: 10px;
+    padding: 8px 25px;
+    font-size: 1rem;
+    border: 1px solid var(--border-color);
+    color: var(--text-color);
+}
+.answer-buttons button:hover {
+    border-color: var(--accent-hover-color);
+    color: var(--accent-hover-color);
+    background: transparent;
+    box-shadow: none;
+}
+.answer-buttons button.selected {
+    background-color: var(--accent-color);
+    border-color: var(--accent-color);
+    color: var(--bg-color);
+}
+
+.result-title {
+    font-family: var(--font-body);
+    font-size: 1rem;
+    color: var(--result-border);
+    text-align: left;
+    margin-bottom: 0.5rem;
+}
+
+#result-text {
+    background-color: var(--result-bg);
+    border: 1px solid var(--result-border);
+    color: var(--text-color);
+    padding: 1rem;
+    font-size: 1.1rem;
+    text-align: left;
+    white-space: pre-wrap;
+    min-height: 100px;
+}
+
+/* 7. Hilfsklassen und Animationen */
+.hidden {
+    display: none !important;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+@keyframes flicker {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.7; }
+    52% { opacity: 0.9; }
+    60% { opacity: 0.6; }
+    62% { opacity: 1; }
+}
+
+.text-answer-input {
+    width: 100%;
+    background-color: var(--input-bg);
+    border: 1px solid var(--border-color);
+    color: var(--text-color);
+    padding: 15px;
+    font-family: var(--font-body);
+    font-size: 1.2rem;
+    margin-top: 1rem;
+    transition: all 0.2s ease-in-out;
+}
+
+.text-answer-input:focus {
+    outline: none;
+    border-color: var(--accent-color);
+    box-shadow: 0 0 10px rgba(255, 183, 0, 0.3);
+}
+
+/* Stil für den neuen, finalen Button */
+#final-assessment-btn {
+    width: 100%;
+    margin-top: 2rem;
+    padding: 15px 20px;
+    border: 2px solid var(--accent-color);
+    background-color: var(--accent-color);
+    color: var(--bg-color);
+    font-family: var(--font-body);
+    font-size: 1.2rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+}
+
+#final-assessment-btn:hover {
+    background-color: transparent;
+    color: var(--accent-color);
+    box-shadow: 0 0 15px var(--accent-color);
+}
+
+
+
+/* Stil für deaktivierte/beantwortete Elemente */
+.disabled,
+button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    background-color: transparent !important;
+    box-shadow: none !important;
+}
+
+.answer-buttons button.selected.disabled {
+    background-color: var(--accent-color) !important;
+    color: var(--bg-color) !important;
+    opacity: 0.6;
+}
+
+#score-display {
+    margin: 2rem auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.score-circle {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    /* Der magische Teil: Ein konischer Farbverlauf, gesteuert durch eine CSS-Variable */
+    background: conic-gradient(
+        var(--score-color, #ffb700) var(--score-percent, 0%), 
+        var(--input-bg) var(--score-percent, 0%)
+    );
+    position: relative;
+    transition: background 0.5s ease-out;
+}
+
+/* Erzeugt das "Loch" in der Mitte, um den Tacho-Effekt zu erzielen */
+.score-circle::before {
+    content: '';
+    position: absolute;
+    width: 85%;
+    height: 85%;
+    background: var(--bg-color);
+    border-radius: 50%;
+}
+
+#score-value {
+    font-family: var(--font-heading);
+    font-size: 3rem;
+    color: var(--score-color, #ffb700);
+    z-index: 2; /* Stellt sicher, dass die Zahl über dem "Loch" liegt */
+    transition: color 0.5s ease-out;
+}
+
+#score-label {
+    font-family: var(--font-body);
+    color: #aaa;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-size: 0.9rem;
+}
+
+#reset-btn {
+    width: 100%;
+    margin-top: 2rem;
+    padding: 12px 20px;
+    background-color: transparent;
+    border: 1px solid var(--border-color);
+    color: var(--text-color);
+    font-family: var(--font-body);
+    font-size: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+}
+
+#reset-btn:hover {
+    background-color: var(--input-bg);
+    border-color: var(--accent-color);
+    color: var(--accent-color);
+}
+
+
+/* 8. Responsiveness für mobile Geräte */
+@media (max-width: 600px) {
+    .container {
+        padding: 1.5rem 1rem;
+    }
+    h1 {
+        font-size: 1.8rem;
+    }
+    .subtitle {
+        font-size: 1rem;
+    }
+}
