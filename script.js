@@ -135,6 +135,34 @@ document.addEventListener('DOMContentLoaded', () => {
             finalAssessmentBtn.classList.add('hidden');
         }
     }
+
+    async function fetchHistory() {
+        try {
+            const response = await fetch('/.netlify/functions/get-history');
+            if (!response.ok) throw new Error("Could not fetch history.");
+            
+            const items = await response.json();
+            historyList.innerHTML = ''; // Leere die alte Liste
+    
+            items.forEach(item => {
+                const li = document.createElement('li');
+                
+                // Definiere die Farbe basierend auf dem Score
+                let scoreColor = '#ffb700'; // Gelb
+                if (item.score < 40) scoreColor = '#2ecc71'; // Grün
+                if (item.score > 75) scoreColor = '#e74c3c'; // Rot
+    
+                li.innerHTML = `
+                    <span class="history-product">${item.product}</span>
+                    <span class="history-score" style="color: ${scoreColor};">${item.score}</span>
+                `;
+                historyList.appendChild(li);
+            });
+        } catch (error) {
+            console.error(error);
+            historyList.innerHTML = '<li>Could not load history.</li>';
+        }
+    }
     
     async function getFinalAssessment() {
         questionsContainer.classList.add('hidden');

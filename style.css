@@ -28,14 +28,13 @@
 body {
     font-family: var(--font-body);
     background-color: var(--bg-color);
-    /* Subtile, rauschende Hintergrundtextur für den "distressed" Look */
     background-image: url('data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 800"%3E%3Cg fill="%23222" fill-opacity="0.2"%3E%3Cpath d="M0 0h800v800H0z"/%3E%3Cpath d="M784 0l-512 512h256l512-512h-256z"/%3E%3C/g%3E%3C/svg%3E');
     color: var(--text-color);
+    
     display: flex;
-    justify-content: center;
+    flex-direction: column; 
     align-items: center;
-    min-height: 100vh;
-    padding: 1rem;
+    padding: 3rem 1rem;
     margin: 0;
 }
 
@@ -325,16 +324,65 @@ button:disabled {
     color: var(--accent-color);
 }
 
+#history-container {
+    max-width: 650px;
+    width: 90%;
+    margin: 3rem auto;
+    padding: 2rem;
+    border: 1px solid var(--border-color);
+    background-color: rgba(0,0,0,0.2);
+}
+
+#history-container h2 {
+    font-family: var(--font-heading);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    text-align: center;
+    margin-top: 0;
+    color: var(--accent-color);
+}
+
+#history-list {
+    list-style: none;
+    padding: 0;
+    font-family: var(--font-body);
+    font-size: 1.1rem;
+    
+    /* NEU: Wir definieren das Raster-Layout */
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* 2 gleich breite Spalten */
+    gap: 1.5rem; /* Abstand zwischen den Raster-Elementen */
+}
+
+#history-list li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    
+    /* ÄNDERUNG: Eine durchgehende Umrandung sieht im Raster besser aus */
+    border: 1px solid var(--border-color);
+    border-radius: 8px; /* Abgerundete Ecken für den "Karten"-Look */
+    background-color: var(--input-bg);
+}
+.history-product {
+    color: var(--text-color);
+}
+
+.history-score {
+    font-weight: bold;
+}
 
 /* 8. Responsiveness für mobile Geräte */
-@media (max-width: 600px) {
-    .container {
-        padding: 1.5rem 1rem;
+@media (max-width: 768px) {
+    #history-list {
+        grid-template-columns: 1fr; /* Nur eine Spalte */
     }
+    
     h1 {
         font-size: 1.8rem;
     }
-    .subtitle {
-        font-size: 1rem;
+    .container {
+        padding: 1.5rem 1rem;
     }
 }
