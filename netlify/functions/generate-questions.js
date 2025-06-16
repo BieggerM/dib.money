@@ -2,7 +2,7 @@
 
 const { GoogleGenerativeAI } = require("@google/generative-ai");
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-const model = process.env.MODELL;
+const aiModel = process.env.MODELL;
 
 exports.handler = async (event) => {
   if (event.httpMethod !== "POST") {
@@ -27,7 +27,7 @@ exports.handler = async (event) => {
 
     // Configure the model to expect a JSON response
     const model = genAI.getGenerativeModel({
-      model: model,
+      model: aiModel,
       generationConfig: {
         responseMimeType: "application/json",
       },

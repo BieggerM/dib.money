@@ -2,7 +2,7 @@ import { GoogleGenerativeAI } from "@google/generative-ai";
 import { neon } from "@netlify/neon";
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-const model = process.env.MODELL;
+const aiModel = process.env.MODELL;
 const sql = neon();
 
 exports.handler = async (event) => {
@@ -33,7 +33,7 @@ exports.handler = async (event) => {
     }
 
     const model = genAI.getGenerativeModel({
-      model: model,
+      model: aiModel,
       generationConfig: {
         responseMimeType: "application/json",
       },
