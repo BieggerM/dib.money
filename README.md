@@ -2,7 +2,7 @@
 # 🔥 DIB.money
 
 💸 Did I Burn Money? - An AI-powered web application that brutally evaluates your purchase decisions and assigns a **"stupidity score"** from 0-100.
-
+   [See for yourself](dib.money).
 ---
 
 ## 🤔 What it Does
