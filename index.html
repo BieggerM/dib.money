@@ -31,13 +31,15 @@
 
         <div class="form-wrapper">
             <form id="product-form">
-                <input type="text" id="product-input" placeholder="The Product I Regret Buying Is..." required>
-                <button type="submit">Begin Idiot Assessment</button>
+                <input type="text" id="product-input" placeholder="The Product I Regret Buying Is..." 
+                       required 
+                       maxlength="80"> 
+                       <div class="char-counter" id="product-char-counter">80</div> 
+                       <button type="submit">Begin Idiot Assessment</button>
             </form>
         </div>
 
         <div id="spinner" class="spinner hidden"></div>
-        <div id="questions-container" class="hidden"></div>
         <div id="questions-container" class="hidden">
         </div>
         <button id="final-assessment-btn" class="hidden">Get My Verdict</button>

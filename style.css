@@ -1,41 +1,51 @@
-/*
-    DESIGN BRIEF IMPLEMENTATION
-    Vibe: Retro-futuristic, "no-nonsense assessment terminal"
-    Palette: Starkes Schwarz-Weiß mit einem Akzent (Amber/Gelb)
-    Typography: Oswald für Titel (kraftvoll), Share Tech Mono für den Rest (Terminal-Feeling)
-*/
 
-/* 1. CSS-Variablen für einfache Verwaltung der Farbpalette */
 :root {
-    --bg-color: #121212; /* Ein sehr dunkles Grau, nicht reines Schwarz */
+    --bg-color: #121212; 
     --text-color: #e0e0e0;
-    --accent-color: #ffb700; /* Ein kräftiges, warmes Amber/Gelb */
+    --accent-color: #ffb700; 
     --accent-hover-color: #ffc940;
     --input-bg: #1f1f1f;
     --border-color: #444;
-    --result-bg: rgba(220, 53, 69, 0.1); /* Roter Hintergrund für das Urteil */
+    --result-bg: rgba(220, 53, 69, 0.1); 
     --result-border: #dc3545;
     
     --font-heading: 'Oswald', sans-serif;
     --font-body: 'Share Tech Mono', monospace;
 }
 
-/* 2. Grundlegende Styles und Hintergrundtextur */
 * {
     box-sizing: border-box;
 }
 
 body {
     font-family: var(--font-body);
-    background-color: var(--bg-color);
-    background-image: url('data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 800"%3E%3Cg fill="%23222" fill-opacity="0.2"%3E%3Cpath d="M0 0h800v800H0z"/%3E%3Cpath d="M784 0l-512 512h256l512-512h-256z"/%3E%3C/g%3E%3C/svg%3E');
+    /* Der Body selbst bekommt nur noch die Grundfarbe */
+    background-color: var(--bg-color); 
     color: var(--text-color);
-    
     display: flex;
-    flex-direction: column; 
+    flex-direction: column;
     align-items: center;
     padding: 3rem 1rem;
     margin: 0;
+    /* Die background-image wird von hier entfernt! */
+}
+
+/* Das ist die neue, stabile Hintergrundebene */
+body::before {
+    content: '';
+    position: fixed; /* Bleibt immer an der gleichen Stelle, egal wie gescrollt wird */
+    
+    /* Spannt das Element über den ganzen Bildschirm */
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+
+    /* Legt es hinter allen anderen Inhalt */
+    z-index: -1; 
+
+    /* Hier kommt jetzt das Hintergrundmuster hin */
+    background-image: url('data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 800"%3E%3Cg fill="%23222" fill-opacity="0.2"%3E%3Cpath d="M0 0h800v800H0z"/%3E%3Cpath d="M784 0l-512 512h256l512-512h-256z"/%3E%3C/g%3E%3C/svg%3E');
 }
 
 .container {
@@ -53,7 +63,7 @@ body {
     width: 48px;
     height: 48px;
     margin-bottom: 1rem;
-    animation: flicker 3s infinite alternate; /* Subtile Flacker-Animation */
+    animation: flicker 3s infinite alternate; 
 }
 
 h1 {
@@ -63,6 +73,22 @@ h1 {
     text-transform: uppercase;
     letter-spacing: 2px;
     margin: 0;
+}
+
+.char-counter {
+    font-family: var(--font-body);
+    font-size: 0.8rem;
+    color: #888;
+    text-align: right;
+    margin-top: -0.75rem; /* Schiebt den Zähler näher unter das Feld */
+    margin-right: 5px;
+    padding-bottom: 1rem;
+    transition: color 0.3s ease;
+}
+
+.char-counter.warning {
+    color: var(--accent-color);
+    font-weight: bold;
 }
 
 .subtitle {
