@@ -30,7 +30,7 @@ body {
 
 body::before {
     content: '';
-    position: fixed; /* Bleibt immer an der gleichen Stelle, egal wie gescrollt wird */
+    position: fixed;
     top: 0;
     left: 0;
     right: 0;
@@ -55,13 +55,11 @@ body::before {
     height: auto;
     margin-bottom: 1rem;
 
-    /* Der statische Schein (dient als Ausgangspunkt) */
     filter: 
         drop-shadow(0 0 3px rgba(255, 255, 220, 0.8)) 
         drop-shadow(0 0 8px #ffb700) 
         drop-shadow(0 0 20px #e74c3c);
 
-    /* NEU: Die Animation, die das Flackern erzeugt */
     animation: fire-glow 4s ease-in-out infinite alternate;
 }
 
@@ -108,7 +106,7 @@ h1 {
     font-size: 0.8rem;
     color: #888;
     text-align: right;
-    margin-top: -0.75rem; /* Schiebt den Zähler näher unter das Feld */
+    margin-top: -0.75rem;
     margin-right: 5px;
     padding-bottom: 1rem;
     transition: color 0.3s ease;
@@ -232,7 +230,6 @@ button:hover, button:focus {
     min-height: 100px;
 }
 
-/* 7. Hilfsklassen und Animationen */
 .hidden {
     display: none !important;
 }
@@ -267,7 +264,7 @@ button:hover, button:focus {
     box-shadow: 0 0 10px rgba(255, 183, 0, 0.3);
 }
 
-/* Stil für den neuen, finalen Button */
+
 #final-assessment-btn {
     width: 100%;
     margin-top: 2rem;
@@ -289,9 +286,6 @@ button:hover, button:focus {
     box-shadow: 0 0 15px var(--accent-color);
 }
 
-
-
-/* Stil für deaktivierte/beantwortete Elemente */
 .disabled,
 button:disabled {
     opacity: 0.5;
@@ -320,7 +314,6 @@ button:disabled {
     border-radius: 50%;
     display: grid;
     place-items: center;
-    /* Der magische Teil: Ein konischer Farbverlauf, gesteuert durch eine CSS-Variable */
     background: conic-gradient(
         var(--score-color, #ffb700) var(--score-percent, 0%), 
         var(--input-bg) var(--score-percent, 0%)

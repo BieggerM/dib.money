@@ -1,5 +1,3 @@
-// in script.js
-
 document.addEventListener('DOMContentLoaded', () => {
 
 
@@ -16,7 +14,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const resetBtn = document.getElementById('reset-btn');
     const historyList = document.getElementById('history-list');
 
-    // App-Zustand
+    // state
     let appState = {
         productName: '',
         questions: {},
@@ -27,20 +25,14 @@ document.addEventListener('DOMContentLoaded', () => {
     productForm.addEventListener('submit', handleStartAssessment);
     finalAssessmentBtn.addEventListener('click', getFinalAssessment);
 
-    // Event Delegation für dynamisch erstellte Fragen
+    // Event Delegation
     questionsContainer.addEventListener('click', handleBooleanAnswer);
     questionsContainer.addEventListener('input', handleTextAnswer);
     resetBtn.addEventListener('click', resetUI);
     fetchHistory();
 
-    // NEU: Event Listener für den Zeichenzähler
     productInput.addEventListener('input', updateCharCounter);
-
-    // Initialisiere den Zähler, falls das Feld nicht leer startet
     updateCharCounter();
-
-
-    // --- Hauptfunktionen ---
 
     async function handleStartAssessment(event) {
         event.preventDefault();
@@ -150,8 +142,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     
     async function fetchHistory() {
-        // NEU: Maximale Länge für angezeigten Produktnamen
-        const MAX_DISPLAY_LENGTH = 21; // Oder jeder andere Wert, den du für passend hältst
+        const MAX_DISPLAY_LENGTH = 21; 
     
         try {
             const response = await fetch('/.netlify/functions/get-history');
@@ -167,13 +158,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 const li = document.createElement('li');
                 const scoreColor = getScoreColor(item.score);
     
-                // NEU: Produktnamen kürzen, wenn er zu lang ist
                 let displayProductName = item.product_name;
                 if (displayProductName.length > MAX_DISPLAY_LENGTH) {
                     displayProductName = displayProductName.substring(0, MAX_DISPLAY_LENGTH) + '...';
                 }
     
-                // Erstelle das HTML für das Listenelement mit dem gekürzten Namen
                 li.innerHTML = `
                     <span class="history-product">${displayProductName}</span>
                     <span class="history-score" style="color: ${scoreColor};">${item.score}</span>
@@ -220,19 +209,17 @@ document.addEventListener('DOMContentLoaded', () => {
             spinner.classList.add('hidden');
         }
     }
-    
-    // NEUE FUNKTION: Aktualisiert den Zeichenzähler
+
     function updateCharCounter() {
-        const maxLength = productInput.maxLength; // Holt die maxlength vom HTML-Attribut
+        const maxLength = productInput.maxLength; 
         const currentLength = productInput.value.length;
         const remainingChars = maxLength - currentLength;
         productCharCounter.textContent = remainingChars;
 
-        // Optional: Füge eine Klasse hinzu, wenn wenig Zeichen übrig sind
-        if (remainingChars <= 10 && remainingChars >=0) { // Z.B. wenn 10 oder weniger Zeichen übrig sind
-            productCharCounter.style.color = '#e74c3c'; // Rot
+        if (remainingChars <= 10 && remainingChars >=0) { 
+            productCharCounter.style.color = '#e74c3c'; 
         } else {
-            productCharCounter.style.color = ''; // Standardfarbe (aus CSS)
+            productCharCounter.style.color = ''; 
         }
     }
     
@@ -244,7 +231,6 @@ document.addEventListener('DOMContentLoaded', () => {
         productForm.classList.remove('hidden');
         productInput.value = '';
         appState = { productName: '', questions: {}, answers: {} };
-        // NEU: Zähler beim Reset zurücksetzen
         updateCharCounter(); 
     }
 
