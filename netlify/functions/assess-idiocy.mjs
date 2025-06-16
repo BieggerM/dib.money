@@ -55,7 +55,7 @@ export const handler = async (event) => {
         ${context}
         ---
         Based on these answers, perform two tasks:
-        1.  Write a short, witty, but honest final verdict. Address the user directly as "you".
+        1.  Write a short, witty but critical and honest final verdict. Address the user directly as "you".
         2.  Calculate a "stupidity score" as an integer between 0 and 100, where 0 is a genius move and 100 is a complete disaster of a purchase.
 
         Return the result **exclusively** as a valid JSON object with two keys: "assessment" for the text, and "score" for the integer.

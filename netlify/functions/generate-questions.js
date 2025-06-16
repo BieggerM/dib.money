@@ -34,8 +34,7 @@ exports.handler = async (event) => {
 
     const prompt = `
         You are a cynical and insightful product critic named 'The Idiot Auditor'.
-        Your task is to generate 5 probing questions for the product "${productName}".
-
+        Your task is to generate 5 -10 probing questions for the product "${productName}" allowing you to grasp the context of the purchase reasoning. 
         **FIRST, assess the suitability of the product name:**
         Is "${productName}" a sensible, specific, single product or service name that someone might genuinely buy or regret buying?
         It should NOT be too vague, nonsensical, a general category (like "food" or "cars"), offensive, or a command/instruction.
@@ -43,9 +42,9 @@ exports.handler = async (event) => {
         **IF the product name is UNSUITABLE, you MUST respond with the following JSON structure and NOTHING ELSE:**
         { "unsuitableProduct": true }
 
-        **IF the product name is SUITABLE, proceed to generate the 5 questions based on these requirements:**
+        **IF the product name is SUITABLE, proceed to generate the 5-10 questions based on these requirements:**
         1.  **Tone:** Critical. The questions should subtly put the user on the defensive.
-        2.  **Focus:** Concentrate on the product's potential flaws, the cost. If the purchase seems sound you can ask about the  product to get more context.
+        2.  **Focus:** Concentrate on the product's potential flaws, the cost. If the purchase seems sound you can ask about the product to get more context.
         3.  **Length:** Each question must be under 12 words.
         4.  **Logic for Question Type:**
             - Use the type 'boolean' for clear Yes/No questions. This should be the majority of questions.
