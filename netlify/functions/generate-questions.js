@@ -39,7 +39,7 @@ exports.handler = async (event) => {
         It should NOT be too vague, nonsensical, a general category (like "food" or "cars"), offensive, or a command/instruction.
 
         **IF the product name is UNSUITABLE, you MUST respond with the following JSON structure and NOTHING ELSE:**
-        { "error": "The product name seems unsuitable for assessment. Please enter a specific, actual product or service.", "unsuitableProduct": true }
+        { "unsuitableProduct": true }
 
         **IF the product name is SUITABLE, proceed to generate the 5 questions based on these requirements:**
         1.  **Tone:** Sarcastic, critical. The questions should subtly put the user on the defensive.

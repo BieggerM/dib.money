@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Buyers Remorse Bureau</title>
+    <title>Did I Burn Money</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@700&family=Share+Tech+Mono&display=swap"
@@ -15,9 +15,7 @@
 </head>
 
 <body>
-
     <main class="container">
-
         <svg class="icon" xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none"
             stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
             <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" />
@@ -27,15 +25,14 @@
         </svg>
 
         <h1>Was I an Idiot for Buying This?</h1>
+        <p class="brand-tagline">from DIB.money - Did I Burn Money?</p> <br>
         <br>
 
         <div class="form-wrapper">
             <form id="product-form">
-                <input type="text" id="product-input" placeholder="The Product I Regret Buying Is..." 
-                       required 
-                       maxlength="60"> 
-                       <div class="char-counter" id="product-char-counter">80</div> 
-                       <button type="submit">Begin Idiot Assessment</button>
+                <input type="text" id="product-input" placeholder="The thing I bought was..." required maxlength="60">
+                <div class="char-counter" id="product-char-counter">80</div>
+                <button type="submit">Begin Idiot Assessment</button>
             </form>
         </div>
 
@@ -45,7 +42,7 @@
         <button id="final-assessment-btn" class="hidden">Get My Verdict</button>
         <div id="result-container" class="hidden">
             <h2 class="result-title">> ASSESSMENT COMPLETE_</h2>
-            
+
             <div id="score-display">
                 <div class="score-circle">
                     <span id="score-value">0</span>
@@ -53,7 +50,7 @@
                 <br>
                 <div id="score-label">Stupidity Score</div>
             </div>
-            
+
             <p id="result-text"></p>
             <button id="reset-btn">Rate more stupidity</button>
         </div>
@@ -61,8 +58,17 @@
     <section id="history-container">
         <h2>Recent Assessments</h2>
         <ol id="history-list">
-            </ol>
+        </ol>
     </section>
+    <footer class="main-footer">
+        <script type='text/javascript' src='https://storage.ko-fi.com/cdn/widget/Widget_2.js'></script>
+        <script type='text/javascript'>
+            kofiwidget2.init('help with ai cost', '#2ecc71', 'G2G41GKAW0');
+            kofiwidget2.draw();
+        </script>
+        <a href="imprint.html">Imprint / Impressum</a>
+        
+    </footer>
 </body>
 
 </html>

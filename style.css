@@ -19,7 +19,6 @@
 
 body {
     font-family: var(--font-body);
-    /* Der Body selbst bekommt nur noch die Grundfarbe */
     background-color: var(--bg-color); 
     color: var(--text-color);
     display: flex;
@@ -27,24 +26,16 @@ body {
     align-items: center;
     padding: 3rem 1rem;
     margin: 0;
-    /* Die background-image wird von hier entfernt! */
 }
 
-/* Das ist die neue, stabile Hintergrundebene */
 body::before {
     content: '';
     position: fixed; /* Bleibt immer an der gleichen Stelle, egal wie gescrollt wird */
-    
-    /* Spannt das Element über den ganzen Bildschirm */
     top: 0;
     left: 0;
     right: 0;
     bottom: 0;
-
-    /* Legt es hinter allen anderen Inhalt */
     z-index: -1; 
-
-    /* Hier kommt jetzt das Hintergrundmuster hin */
     background-image: url('data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 800"%3E%3Cg fill="%23222" fill-opacity="0.2"%3E%3Cpath d="M0 0h800v800H0z"/%3E%3Cpath d="M784 0l-512 512h256l512-512h-256z"/%3E%3C/g%3E%3C/svg%3E');
 }
 
@@ -64,6 +55,14 @@ body::before {
     height: 48px;
     margin-bottom: 1rem;
     animation: flicker 3s infinite alternate; 
+}
+
+.brand-tagline {
+    color: #bbb; 
+    font-family: 'Share Tech Mono', monospace; 
+    font-size: 1rem; 
+    margin-top: 1rem; 
+    margin-bottom: 0.5rem;
 }
 
 h1 {
@@ -350,8 +349,9 @@ button:disabled {
 
 #history-container {
     max-width: 750px;
-    width: 90%;
+    width: 100%;
     margin: 3rem auto;
+    margin-bottom: 1.5rem;
     padding: 2rem;
     border: 1px solid var(--border-color);
     background-color: rgba(0,0,0,0.2);
@@ -384,7 +384,7 @@ button:disabled {
     padding: 1rem;
     
     border: 1px solid var(--border-color);
-    border-radius: 8px; /* Abgerundete Ecken für den "Karten"-Look */
+    border-radius: 8px;
     background-color: var(--input-bg);
 }
 .history-product {
@@ -395,10 +395,36 @@ button:disabled {
     font-weight: bold;
 }
 
-/* 8. Responsiveness für mobile Geräte */
+
+.imprint-page p {
+    text-align: left; 
+}
+
+.main-footer {
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center; 
+    width: 100%;
+    max-width: 800px; 
+    padding: 0 1.5rem;
+    box-sizing: border-box; 
+}
+
+.main-footer a { 
+    color: #555;
+    text-decoration: none;
+    font-size: 0.8rem;
+    transition: color 0.2s ease-in-out;
+}
+
+.main-footer a:hover { 
+    color: #888;
+}
+
+
 @media (max-width: 768px) {
     #history-list {
-        grid-template-columns: 1fr; /* Nur eine Spalte */
+        grid-template-columns: 1fr; /
     }
     
     h1 {
@@ -406,5 +432,15 @@ button:disabled {
     }
     .container {
         padding: 1.5rem 1rem;
+    }
+
+    .main-footer { 
+        flex-direction: column; 
+        align-items: center; 
+        padding: 0 1rem;
+    }
+
+    .main-footer a { 
+        margin-top: 1rem;
     }
 }
