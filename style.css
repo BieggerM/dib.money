@@ -52,7 +52,7 @@ body::before {
     background-color: var(--bg-color);
     border: 1px solid var(--border-color);
     padding: 2rem 3rem;
-    max-width: 650px;
+    max-width: 750px;
     width: 100%;
     text-align: center;
     box-shadow: 0 0 15px rgba(0, 0, 0, 0.5), inset 0 0 5px rgba(255, 183, 0, 0.1);
@@ -349,7 +349,7 @@ button:disabled {
 }
 
 #history-container {
-    max-width: 650px;
+    max-width: 750px;
     width: 90%;
     margin: 3rem auto;
     padding: 2rem;
@@ -371,11 +371,10 @@ button:disabled {
     padding: 0;
     font-family: var(--font-body);
     font-size: 1.1rem;
-    
-    /* NEU: Wir definieren das Raster-Layout */
+
     display: grid;
-    grid-template-columns: repeat(2, 1fr); /* 2 gleich breite Spalten */
-    gap: 1.5rem; /* Abstand zwischen den Raster-Elementen */
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem; 
 }
 
 #history-list li {
@@ -384,7 +383,6 @@ button:disabled {
     align-items: center;
     padding: 1rem;
     
-    /* ÄNDERUNG: Eine durchgehende Umrandung sieht im Raster besser aus */
     border: 1px solid var(--border-color);
     border-radius: 8px; /* Abgerundete Ecken für den "Karten"-Look */
     background-color: var(--input-bg);

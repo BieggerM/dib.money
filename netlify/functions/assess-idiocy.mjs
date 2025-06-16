@@ -15,6 +15,18 @@ exports.handler = async (event) => {
             return { statusCode: 400, body: 'Fehlende Daten.' };
         }
 
+        const MAX_ANSWER_LENGTH = 60
+
+        for (const key in answers) {
+            // Stelle sicher, dass die Antwort existiert und ein String ist
+            if (typeof answers[key] === 'string' && answers[key].length > MAX_ANSWER_LENGTH) {
+                return {
+                    statusCode: 400,
+                    body: JSON.stringify({ error: `Antwort für Frage "${key}" überschreitet die maximale Länge von ${MAX_ANSWER_LENGTH} Zeichen.` }),
+                };
+            }
+        }
+
         const model = genAI.getGenerativeModel({
             model: "gemini-1.5-flash-latest",
             // WICHTIG: Wir sagen dem Modell, dass die Antwort JSON sein wird.

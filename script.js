@@ -1,19 +1,21 @@
-// in script.js (komplett ersetzen)
+// in script.js
 
 document.addEventListener('DOMContentLoaded', () => {
 
-    // HTML-Elemente abrufen
+
     const productForm = document.getElementById('product-form');
     const productInput = document.getElementById('product-input');
+    const productCharCounter = document.getElementById('product-char-counter');
     const spinner = document.getElementById('spinner');
     const questionsContainer = document.getElementById('questions-container');
-    const finalAssessmentBtn = document.getElementById('final-assessment-btn'); // NEU
+    const finalAssessmentBtn = document.getElementById('final-assessment-btn');
     const resultContainer = document.getElementById('result-container');
     const resultText = document.getElementById('result-text');
     const scoreCircle = document.querySelector('.score-circle');
     const scoreValue = document.getElementById('score-value');
     const resetBtn = document.getElementById('reset-btn');
     const historyList = document.getElementById('history-list');
+
     // App-Zustand
     let appState = {
         productName: '',
@@ -23,13 +25,21 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- Event Listeners ---
     productForm.addEventListener('submit', handleStartAssessment);
-    finalAssessmentBtn.addEventListener('click', getFinalAssessment); // NEU
+    finalAssessmentBtn.addEventListener('click', getFinalAssessment);
 
     // Event Delegation für dynamisch erstellte Fragen
     questionsContainer.addEventListener('click', handleBooleanAnswer);
-    questionsContainer.addEventListener('change', handleTextAnswer); // 'change' ist besser als 'input'
+    questionsContainer.addEventListener('input', handleTextAnswer);
     resetBtn.addEventListener('click', resetUI);
     fetchHistory();
+
+    // NEU: Event Listener für den Zeichenzähler
+    productInput.addEventListener('input', updateCharCounter);
+
+    // Initialisiere den Zähler, falls das Feld nicht leer startet
+    updateCharCounter();
+
+
     // --- Hauptfunktionen ---
 
     async function handleStartAssessment(event) {
@@ -40,7 +50,7 @@ document.addEventListener('DOMContentLoaded', () => {
         resetUI();
         appState.productName = productName;
         spinner.classList.remove('hidden');
-        productForm.classList.add('hidden'); // Verstecke das Start-Formular
+        productForm.classList.add('hidden');
 
         try {
             const response = await fetch('/.netlify/functions/generate-questions', {
@@ -80,9 +90,8 @@ document.addEventListener('DOMContentLoaded', () => {
                         <button>No</button>
                     </div>`;
             } else if (questionData.type === 'text') {
-                // NEU: Nur noch ein Input-Feld, kein Formular
                 questionHTML += `
-                    <input type="text" class="text-answer-input" placeholder="Your answer..." data-question-key="${key}">`;
+                    <input type="text" class="text-answer-input" placeholder="Your answer..." data-question-key="${key}" maxlength="60">`;
             }
             
             questionBlock.innerHTML = questionHTML;
@@ -117,7 +126,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (answer) {
             appState.answers[questionKey] = answer;
         } else {
-            delete appState.answers[questionKey]; // Entferne die Antwort, wenn das Feld leer ist
+            delete appState.answers[questionKey];
         }
         
         checkIfAllAnswered();
@@ -127,7 +136,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const totalQuestions = Object.keys(appState.questions).length;
         const answeredQuestions = Object.keys(appState.answers).length;
 
-        // NEU: Zeige den finalen Button, statt direkt die API aufzurufen
         if (totalQuestions > 0 && totalQuestions === answeredQuestions) {
             finalAssessmentBtn.classList.remove('hidden');
         } else {
@@ -136,17 +144,16 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function getScoreColor(score) {
-        if (score < 40) return '#2ecc71'; // Grün
-        if (score > 75) return '#e74c3c'; // Rot
-        return '#ffb700'; // Gelb für alles dazwischen
+        if (score < 40) return '#2ecc71';
+        if (score > 75) return '#e74c3c';
+        return '#ffb700';
     }
     
-    /**
-     * Ruft die letzten Bewertungen vom Backend ab und zeigt sie an.
-     */
     async function fetchHistory() {
+        // NEU: Maximale Länge für angezeigten Produktnamen
+        const MAX_DISPLAY_LENGTH = 21; // Oder jeder andere Wert, den du für passend hältst
+    
         try {
-            // Rufe unsere neue serverlose Funktion auf
             const response = await fetch('/.netlify/functions/get-history');
             if (!response.ok) {
                 throw new Error("Could not fetch history.");
@@ -154,27 +161,29 @@ document.addEventListener('DOMContentLoaded', () => {
             
             const items = await response.json();
     
-            // Leere die bestehende Liste, bevor wir sie neu befüllen
             historyList.innerHTML = ''; 
-    
-            // Gehe durch jeden Eintrag und erstelle ein Listenelement
+            
             items.forEach(item => {
                 const li = document.createElement('li');
                 const scoreColor = getScoreColor(item.score);
     
-                // Erstelle das HTML für das Listenelement
+                // NEU: Produktnamen kürzen, wenn er zu lang ist
+                let displayProductName = item.product_name;
+                if (displayProductName.length > MAX_DISPLAY_LENGTH) {
+                    displayProductName = displayProductName.substring(0, MAX_DISPLAY_LENGTH) + '...';
+                }
+    
+                // Erstelle das HTML für das Listenelement mit dem gekürzten Namen
                 li.innerHTML = `
-                    <span class="history-product">${item.product_name}</span>
+                    <span class="history-product">${displayProductName}</span>
                     <span class="history-score" style="color: ${scoreColor};">${item.score}</span>
                 `;
     
-                // Füge das fertige Element zur Liste im HTML hinzu
                 historyList.appendChild(li);
             });
     
         } catch (error) {
             console.error(error);
-            // Zeige eine Fehlermeldung an, falls etwas schiefgeht
             historyList.innerHTML = '<li>Could not load recent assessments.</li>';
         }
     }
@@ -192,14 +201,11 @@ document.addEventListener('DOMContentLoaded', () => {
             });
             if (!response.ok) throw new Error(`Server error: ${response.statusText}`);
     
-            // Die Antwort ist jetzt ein Objekt mit "assessment" und "score"
             const data = await response.json();
             console.log(data)
-            // UI mit beiden Werten aktualisieren
             resultText.textContent = data.assessment;
             scoreValue.textContent = data.score;
     
-            // Den Tacho und die Farbe dynamisch anpassen
             const score = data.score;
             const scoreColor = getScoreColor(score);
             scoreCircle.style.setProperty('--score-percent', `${score}%`);
@@ -215,15 +221,31 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
     
+    // NEUE FUNKTION: Aktualisiert den Zeichenzähler
+    function updateCharCounter() {
+        const maxLength = productInput.maxLength; // Holt die maxlength vom HTML-Attribut
+        const currentLength = productInput.value.length;
+        const remainingChars = maxLength - currentLength;
+        productCharCounter.textContent = remainingChars;
+
+        // Optional: Füge eine Klasse hinzu, wenn wenig Zeichen übrig sind
+        if (remainingChars <= 10 && remainingChars >=0) { // Z.B. wenn 10 oder weniger Zeichen übrig sind
+            productCharCounter.style.color = '#e74c3c'; // Rot
+        } else {
+            productCharCounter.style.color = ''; // Standardfarbe (aus CSS)
+        }
+    }
     
     function resetUI() {
         spinner.classList.add('hidden');
         questionsContainer.classList.add('hidden');
         finalAssessmentBtn.classList.add('hidden');
-        resultContainer.classList.add('hidden'); // Versteckt automatisch den Score darin
+        resultContainer.classList.add('hidden');
         productForm.classList.remove('hidden');
         productInput.value = '';
         appState = { productName: '', questions: {}, answers: {} };
+        // NEU: Zähler beim Reset zurücksetzen
+        updateCharCounter(); 
     }
 
     function showError(message) {
