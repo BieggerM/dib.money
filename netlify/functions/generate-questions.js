@@ -4,18 +4,32 @@ const genAI = new GoogleGenerativeAI(process.env.AI_API_KEY);
 let aiModel = process.env.AI_MODEL;
 
 exports.handler = async (event) => {
+  const startTime = Date.now();
+  
   if (event.httpMethod !== "POST") {
-    return { statusCode: 405, body: "Method Not Allowed" };
+    console.warn(`Method not allowed: ${event.httpMethod}`);
+    return {
+      statusCode: 405,
+      body: JSON.stringify({ error: "Method not allowed. Use POST request." })
+    };
   }
 
   try {
     const { productName } = JSON.parse(event.body);
     if (!productName) {
-      return { statusCode: 400, body: "Product name is missing." };
+      console.error("Product name is missing from request");
+      return {
+        statusCode: 400,
+        body: JSON.stringify({ error: "Product name is required." })
+      };
     }
 
     const MAX_PRODUCT_NAME_LENGTH = 60;
     if (productName.length > MAX_PRODUCT_NAME_LENGTH) {
+      console.warn(`Product name too long`, {
+        length: productName.length,
+        maxLength: MAX_PRODUCT_NAME_LENGTH
+      });
       return {
         statusCode: 400,
         body: JSON.stringify({
@@ -23,6 +37,8 @@ exports.handler = async (event) => {
         }),
       };
     }
+
+    console.info(`Generating questions for product: ${productName}`);
 
     // Configure the model to expect a JSON response
     const model = genAI.getGenerativeModel({
@@ -60,40 +76,57 @@ exports.handler = async (event) => {
 
     const result = await model.generateContent(prompt);
     const responseText = (await result.response).text();
+    
     // parse to json
     let jsonResponse;
     try {
       jsonResponse = JSON.parse(responseText);
     } catch (parseError) {
-      console.error(
-        "Failed to parse AI response as JSON:",
+      console.error("Failed to parse AI response as JSON", {
         responseText,
-        parseError
-      );
+        error: parseError.message,
+        stack: parseError.stack
+      });
       return {
         statusCode: 500,
-        body: JSON.stringify({ error: "AI response was not valid JSON." }),
+        body: JSON.stringify({ error: "AI response was not valid JSON format." }),
       };
     }
 
     // Check if the product name is unsuitable
     if (jsonResponse.unsuitableProduct === true) {
-      console.log("Product name is unsuitable:", responseText);
+      console.info("Product name deemed unsuitable by AI", {
+        productName,
+        responseText
+      });
       return {
         statusCode: 400,
         body: JSON.stringify(jsonResponse),
       };
     }
 
+    const responseTime = Date.now() - startTime;
+    console.info(`Questions generated successfully`, {
+      productName,
+      questionCount: Object.keys(jsonResponse).length,
+      responseTime: `${responseTime}ms`
+    });
+
     return {
       statusCode: 200,
       body: responseText,
     };
   } catch (error) {
-    console.error("Error in generate-questions function:", error);
+    console.error("Unhandled error in generate-questions function", {
+      error: error.message,
+      stack: error.stack,
+      productName: productName || 'unknown'
+    });
     return {
       statusCode: 500,
-      body: JSON.stringify({ error: "Failed to communicate with the AI." }),
+      body: JSON.stringify({
+        error: "An unexpected error occurred while generating questions. Please try again later."
+      }),
     };
   }
 };
