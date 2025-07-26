@@ -142,38 +142,42 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     
     async function fetchHistory() {
-        const MAX_DISPLAY_LENGTH = 21; 
-    
+        const MAX_DISPLAY_LENGTH = 21;
+        const historySpinner = document.getElementById('history-spinner');
+
         try {
+            historySpinner.classList.remove('hidden');
             const response = await fetch('/.netlify/functions/get-history');
             if (!response.ok) {
                 throw new Error("Could not fetch history.");
             }
-            
+
             const items = await response.json();
-    
-            historyList.innerHTML = ''; 
-            
+
+            historyList.innerHTML = '';
+
             items.forEach(item => {
                 const li = document.createElement('li');
                 const scoreColor = getScoreColor(item.score);
-    
+
                 let displayProductName = item.product_name;
                 if (displayProductName.length > MAX_DISPLAY_LENGTH) {
                     displayProductName = displayProductName.substring(0, MAX_DISPLAY_LENGTH) + '...';
                 }
-    
+
                 li.innerHTML = `
                     <span class="history-product">${displayProductName}</span>
                     <span class="history-score" style="color: ${scoreColor};">${item.score}</span>
                 `;
-    
+
                 historyList.appendChild(li);
             });
-    
+
         } catch (error) {
             console.error(error);
             historyList.innerHTML = '<li>Could not load recent assessments.</li>';
+        } finally {
+            historySpinner.classList.add('hidden');
         }
     }
     
